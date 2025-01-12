@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café UwU</title>
+    <style>
+        body {
+            background-color: #ffe4e6; /* Fondo rosa claro */
+            font-family: 'Arial', sans-serif;
+            color: #4a154b; /* Rosa oscuro para texto */
+            margin: 0;
+            padding: 0;
+            
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            color: #ff66b2; /* Rosa vibrante */
+            margin: 20px 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .menu {
+            flex: 2;
+            background-color: #fff0f5; /* Fondo blanco con toque rosa */
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item {
+            background-color: #ffcce6; /* Fondo rosa pálido */
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-item:hover {
+            background-color: #ff99cc; /* Rosa más intenso */
+            transition: background-color 0.3s;
+        }
+
+        .menu-item button {
+            background-color: #ff66b2; /* Botón rosa vibrante */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .menu-item button:hover {
+            background-color: #e60073; /* Botón rosa más oscuro */
+        }
+
+        .total {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #4a154b;
+        }
+
+        .cart {
+            flex: 1;
+            margin-left: 20px;
+            padding: 20px;
+            background-color: #ffe6f7; /* Fondo rosa más claro */
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart h2 {
+            text-align: center;
+            color: #ff66b2;
+        }
+
+        .cart ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart li {
+            margin: 10px 0;
+            color: #4a154b;
+        }
+
+        .reset {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .reset button {
+            background-color: #e60073;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .reset button:hover {
+            background-color: #c4005c;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #4a154b;
+        }
+    </style>
+</head>
+<body>
+    <h1>Café UwU</h1>
+    <div class="container">
+        <div class="menu">
+            <div class="menu-item">
+                <span>🧸 LayLay: 3 Cafés del día + 3 Galletas $120</span>
+                <button onclick="addToCart('LayLay', 120)">Agregar</button>
+            </div>
+            <div class="menu-item">
+                <span>😼 Cat: 3 té matcha + 3 Tiramisú $120</span>
+                <button onclick="addToCart('Cat', 120)">Agregar</button>
+            </div>
+            <div class="menu-item">
+                <span>🍜 Spicy: 3 ramen + 3 limonadas $240</span>
+                <button onclick="addToCart('Spicy', 240)">Agregar</button>
+            </div>
+            <div class="menu-item">
+                <span>💷 Kaching: 3 Cafés del día + 3 tiramisú + 1 ticket casino $1200</span>
+                <button onclick="addToCart('Kaching', 1200)">Agregar</button>
+            </div>
+            <div class="menu-item">
+                <span>🔧 Miau x GDS: 3 té matcha + 3 galletas + 1 kit reparación $500</span>
+                <button onclick="addToCart('Miau x GDS', 500)">Agregar</button>
+            </div>
+            <div class="menu-item">
+                <span>🍫 XXL: 8 bebidas (3, 3 y 2) + 1 Pastel de chocolate $480</span>
+                <button onclick="addToCart('XXL', 480)">Agregar</button>
+            </div>
+        </div>
+
+        <div class="cart">
+            <h2>Historial</h2>
+            <ul id="cart-items"></ul>
+            <div class="reset">
+                <button onclick="resetCart()">Reiniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="total" id="total-display">Total: $0</div>
+
+    <footer>
+        © 2025 Café UwU. Todos los derechos reservados.
+    </footer>
+
+    <script>
+        let total = 0;
+        const cartSummary = {};
+
+        function addToCart(item, price) {
+            total += price;
+            if (cartSummary[item]) {
+                cartSummary[item].quantity++;
+                cartSummary[item].subtotal += price;
+            } else {
+                cartSummary[item] = { quantity: 1, subtotal: price };
+            }
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartList = document.getElementById('cart-items');
+            cartList.innerHTML = '';
+            for (const item in cartSummary) {
+                const li = document.createElement('li');
+                li.textContent = `${cartSummary[item].quantity} x ${item} - $${cartSummary[item].subtotal}`;
+                cartList.appendChild(li);
+            }
+            document.getElementById('total-display').innerText = `Total: $${total}`;
+        }
+
+        function resetCart() {
+            total = 0;
+            for (const item in cartSummary) {
+                delete cartSummary[item];
+            }
+            updateCart();
+        }
+    </script>
+</body>
+</html>
