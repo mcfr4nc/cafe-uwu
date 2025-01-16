@@ -168,6 +168,22 @@
         let total = 0;
         const cartSummary = {};
 
+        // Cargar los datos guardados en localStorage al iniciar
+        window.onload = function () {
+            const savedCart = localStorage.getItem('cartSummary');
+            const savedTotal = localStorage.getItem('total');
+
+            if (savedCart) {
+                Object.assign(cartSummary, JSON.parse(savedCart));
+            }
+
+            if (savedTotal) {
+                total = parseInt(savedTotal, 10);
+            }
+
+            updateCart();
+        };
+
         function addToCart(item, price) {
             total += price;
             if (cartSummary[item]) {
@@ -176,6 +192,7 @@
             } else {
                 cartSummary[item] = { quantity: 1, subtotal: price };
             }
+            saveCartToLocalStorage();
             updateCart();
         }
 
@@ -195,7 +212,14 @@
             for (const item in cartSummary) {
                 delete cartSummary[item];
             }
+            saveCartToLocalStorage();
             updateCart();
+        }
+
+        // Guardar el carrito y el total en localStorage
+        function saveCartToLocalStorage() {
+            localStorage.setItem('cartSummary', JSON.stringify(cartSummary));
+            localStorage.setItem('total', total);
         }
     </script>
 </body>
